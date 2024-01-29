@@ -10,7 +10,7 @@ export function ShoppingProvider({children}){
   //Product detail - Open/Close
     const [isPoroductDetailOpen, setIsPoroductDetailOpen] = useState(false)
   //Product Detail - Show Product
-  const [productToShow, setProductToShow] = useState({})
+    const [productToShow, setProductToShow] = useState({})
   
   //Abrir y cerrar ventana de detalles
     function openCloseDetail(){
@@ -21,6 +21,50 @@ export function ShoppingProvider({children}){
       openCloseDetail()
       setProductToShow(item)
   }
+ 
+  //Shoping cart - Open/Close
+  const [isShoppingCartOpen, setIsShoppingCartOpen] = useState(false)
+
+  function shoppingCartOpenClose(){
+    setIsShoppingCartOpen(!isShoppingCartOpen)
+  }
+
+  //Productos en carrito
+  const [productsInCart, setProductsInCart] = useState([])
+
+  //agregar productos al carrito
+  function agregarProductosAlCart(event, productData){
+    event.stopPropagation()
+    isPoroductDetailOpen&&openCloseDetail()
+    setIsShoppingCartOpen(true)
+    setContadorCarrito(contadorCarrito + 1)
+    setProductsInCart([... productsInCart, productData])
+    sumarAlTotal(productData.price)
+  }
+
+  //eliminar productos de carrito ------------------------------------------------------------------------
+ function eliminarProductoCarrito(id,price){
+    const nuevoArray = productsInCart.filter(product => product.id !== id)
+    setProductsInCart(nuevoArray)
+    setContadorCarrito(contadorCarrito-1)
+    sumarAlTotal(-price)
+
+    // let nuevaLista = [...productsInCart]
+    // const i = productsInCart.findIndex(product => product.id === id)
+    // nuevaLista.splice(i,1)
+    // setProductsInCart(nuevaLista)
+    // setContadorCarrito(contadorCarrito-1)
+//---------------------------------------------------------------------------------------------------
+  }
+
+  //estado valor total del carrito
+  const [totalCart, setTotalCart] = useState(0)
+
+  //sumar valor de productos:
+  function sumarAlTotal(price){
+    setTotalCart(totalCart+price)
+  }
+
 
   //Datos de la API
   const [items, setItems] = useState(null)
@@ -35,12 +79,11 @@ export function ShoppingProvider({children}){
         return response.json()
       })
       .then(info => {
-        console.log('ITEMS:', info)
         setItems(info)
       })
    
       .catch(error => {
-        alert('Error:', error.message)
+        alert('Error:', error)
       })
   }, [])
 
@@ -52,10 +95,17 @@ export function ShoppingProvider({children}){
             openCloseDetail,
             isPoroductDetailOpen,
             productToShow,
-            // setProductToShow,
             items,
-            showProducts
-
+            showProducts,
+            shoppingCartOpenClose,
+            isShoppingCartOpen,
+            agregarProductosAlCart,
+            productsInCart,
+            setProductsInCart,
+            eliminarProductoCarrito,
+            totalCart,
+            setTotalCart,
+            sumarAlTotal
         }}>
           {children}
         </ShoppingCardContext.Provider>

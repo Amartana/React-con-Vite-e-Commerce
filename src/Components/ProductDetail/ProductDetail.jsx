@@ -6,7 +6,7 @@ import './ProductDetail.css'
 
 export function ProductDetail(){
     const context = useContext(ShoppingCardContext)
-    console.log('PORUDCUT TO SHOW:', context.productToShow)
+        // console.log('PORUDCUT TO SHOW:', context.productToShow)
     return(
         <aside className={`${context.isPoroductDetailOpen ? 'flex' : 'hidden'} product-detail flex-col fixed right-0 border border-black rounded-lg bg-white`}>
             <div className='flex justify-between items-center p-6'>

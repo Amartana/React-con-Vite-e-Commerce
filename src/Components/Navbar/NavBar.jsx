@@ -107,7 +107,10 @@ function Navbar() {
                     </NavLink>
                 </li>
                 <li className="flex">
-                    <ShoppingBagIcon  className='h-6 w-6 text-black'/>
+                    <ShoppingBagIcon  
+                    className='h-6 w-6 text-black'
+                    onClick={context.shoppingCartOpenClose}
+                    />
                     <div className="rounded-full bg-slate-100 w-4 h-4 flex items-center justify-center"> {context.contadorCarrito} </div>
                 </li>
             </ul>

@@ -4,6 +4,8 @@ import { Card } from '../../Components/Card/Card'
 import { ProductDetail } from "../../Components/ProductDetail/ProductDetail"
 import './Home.css'
 import { ShoppingCardContext } from "../../Context/Context"
+import { ShoppingCart } from "../../Components/ShoppingCart/ShoppingCart"
+
 
 function Home() {
  const context = useContext(ShoppingCardContext)
@@ -20,6 +22,7 @@ function Home() {
         }
       </div>
       <ProductDetail />
+      <ShoppingCart />
     </ Layout>
 
   )
