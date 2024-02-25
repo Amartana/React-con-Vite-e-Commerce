@@ -17,7 +17,7 @@ function AppRoutes() {
       element: <Home />,
     },
     {
-      path: '/MyAccount',
+      path: '/My-account',
       element: <MyAccount />,
     },
     {
@@ -25,15 +25,23 @@ function AppRoutes() {
       element: <MyOrder />,
     },
     {
-      path: '/MyOrder',
+      path: '/My-order',
       element: <MyOrder />,
     },
     {
-      path: '/MyOrders',
+      path: '/my-orders',
       element: <MyOrders />,
     },
     {
-      path: '/SignIn',
+      path: '/My-orders/last',
+      element: <MyOrder />,
+    },
+    {
+      path: '/My-orders/:id',
+      element: <MyOrder />,
+    },
+    {
+      path: '/Sign-in',
       element: <SignIn />,
     },
     {

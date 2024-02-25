@@ -6,36 +6,91 @@ import './OrderCard.css'
 import PropTypes from 'prop-types';
 
 
-function OrderCard({ id, title, images, price }) {
+function OrderCard({ id, title, images, price, mostrarCont, mostrarDelte }) {
 
     const context = useContext(ShoppingCardContext)
     //Contador de producto
     const [cantidadProducto, setCantidadProducto] = useState(1)
     const [priceProducto, setPriceProducto] = useState(price)
 
+
 //-------- Pasar por parametros si price es +/- y si 1 es +/- y unir las funciones de sumar y restar en una sola
-    //Restar productos 
+   
+    //Sumar productos
+    const sumarProducto = () => {
+        setCantidadProducto(cantidadProducto + 1)
+        context.setContadorCarrito(context.contadorCarrito+1)
+        setPriceProducto(priceProducto+price)
+        context.sumarAlTotal(price)
+
+        //cHAT gtp:
+        const updatedProductsInCart = [...context.productsInCart];
+        const index = updatedProductsInCart.findIndex(product => product.id === id);
+        updatedProductsInCart[index] = {
+            ...updatedProductsInCart[index],
+            cantidad: updatedProductsInCart[index].cantidad + 1
+        };
+    
+        context.setProductsInCart(updatedProductsInCart);
+    }
+
+//// ESTO NO ES UNA BUENA PRACTICA. ACTUALIZAR EL QUE RESTA A VER SI ENTENDI COMO ES LO QUE ME PASO CHAT GPT. DESPUES UNIR SUMA CON RESTA
+
+
+
+       
+//Restar productos 
     const restarProducto = () => { 
         if(cantidadProducto > 1){
             setCantidadProducto(cantidadProducto - 1)
             context.setContadorCarrito(context.contadorCarrito-1)
             setPriceProducto(priceProducto-price)
             context.sumarAlTotal(-price)
+            context.productsInCart[context.productsInCart.findIndex(product => product.id === id)].cantidad -=1
+            console.log(context.productsInCart)
         } else {
-            context.eliminarProductoCarrito(id, price)
+            context.eliminarProductoCarrito(id, priceProducto, price)
         }
-      
     }
-    //Sumar productos
-    const sumarProducto = () => {
-         setCantidadProducto(cantidadProducto + 1)
-         context.setContadorCarrito(context.contadorCarrito+1)
-         setPriceProducto(priceProducto+price)
-         context.sumarAlTotal(price)
-        }
+
+
+    function mostrarContador(parametro){
+        if(parametro) 
+            return (
+        <div className='flex items-center justify-center gap-1 contador'>
+        <MinusIcon 
+            className='restarProducto h-5 w-5 text-black cursor-pointer'
+            onClick={restarProducto}
+        />
+
+        <div  className='h-6 w-6 flex justify-center font-medium' > 
+            <span> {cantidadProducto} </span>
+        </div>
+
+        <PlusIcon 
+            className='sumarProducto h-5 w-5 text-black cursor-pointer'
+            onClick={sumarProducto}
+        />
+
+    </div>
+    )
+    }
+
+    function mostrarDel(parametro){
+        if(parametro) 
+            return (
+                <TrashIcon className='elimarProducto h-6 w-6 text-black cursor-pointer'
+                    onClick={() => context.eliminarProductoCarrito(id, priceProducto, price)}
+                />
+   )
+    }
+
+
+
+
 // ---------------------------------------------------------------------------------------------------
 
-    //sumar al total del carrito
+    
 
     return (
         <div className="flex justify-between items-center mb-3">
@@ -45,6 +100,9 @@ function OrderCard({ id, title, images, price }) {
                 </figure>
                 <div className="w-40 flex flex-col justify-around">
                     <p className='text-sm font-light flex h-10 items-center'> {title} </p>
+
+                 {mostrarContador(mostrarCont)}
+{/*                 
                     <div className='flex items-center justify-center gap-1 contador'>
                         <MinusIcon 
                             className='restarProducto h-5 w-5 text-black cursor-pointer'
@@ -59,16 +117,17 @@ function OrderCard({ id, title, images, price }) {
                             className='sumarProducto h-5 w-5 text-black cursor-pointer'
                             onClick={sumarProducto}
                         />
-                        {/* Agregar contador para sumar o restar items del mismo producto */}
-                    </div>
+                       
+                    </div> */}
+                
                 </div>
             </div>
             <div className="flex items-center gap-2">
                 <p className="text-lg font-medium">${priceProducto}</p>
-                <TrashIcon className='elimarProducto h-6 w-6 text-black cursor-pointer'
-                    onClick={() => context.eliminarProductoCarrito(id, price)}
-                />
+                {mostrarDel(mostrarDelte)}
+                
             </div>
+            
         </div>
         
     )
@@ -78,7 +137,9 @@ OrderCard.propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     images: PropTypes.array.isRequired,
-    price: PropTypes.number.isRequired
+    price: PropTypes.number.isRequired,
+    mostrarCont: PropTypes.bool.isRequired,
+    mostrarDelte: PropTypes.bool.isRequired
 }
 
 export { OrderCard }

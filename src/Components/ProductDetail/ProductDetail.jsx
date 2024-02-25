@@ -20,7 +20,7 @@ export function ProductDetail(){
                 <figure className='px-6'>
                     <img 
                     className='w-full h-full rounded-lg ' 
-                    src={context.productToShow.images ? context.productToShow.images[1]: ''} alt='dsa'></img>
+                    src={context.productToShow.images ? context.productToShow.images[1]: ''} alt={context.productToShow.title}></img>
                 </figure>
                 <p className='flex flex-col p-6'>
                 <span className='font-medium text-2x1 mb-2'>$ {context.productToShow.price}</span>
