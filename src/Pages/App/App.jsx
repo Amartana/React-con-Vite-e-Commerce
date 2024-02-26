@@ -17,6 +17,10 @@ function AppRoutes() {
       element: <Home />,
     },
     {
+      path: '/:categoria',
+      element: <Home />,
+    },
+    {
       path: '/My-account',
       element: <MyAccount />,
     },

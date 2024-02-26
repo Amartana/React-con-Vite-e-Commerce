@@ -47,7 +47,6 @@ function OrderCard({ id, title, images, price, mostrarCont, mostrarDelte }) {
             setPriceProducto(priceProducto-price)
             context.sumarAlTotal(-price)
             context.productsInCart[context.productsInCart.findIndex(product => product.id === id)].cantidad -=1
-            console.log(context.productsInCart)
         } else {
             context.eliminarProductoCarrito(id, priceProducto, price)
         }

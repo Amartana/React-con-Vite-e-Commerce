@@ -10,9 +10,6 @@ function MyOrder() {
   const params = useParams();
   const indexOrderPath = Number(params.id);
   
-  console.log('1 CONSOLE:', context.productsInCart)
-  console.log('2 CONSOLE:', context.order?.slice(-1)[0].products)
-
   return (
     <> <Layout>
      MyOrder

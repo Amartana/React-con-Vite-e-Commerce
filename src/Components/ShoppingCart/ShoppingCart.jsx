@@ -23,6 +23,7 @@ export function ShoppingCart() {
         // context.productsInCart.map(product => product.cantidad = 0)
         context.setProductsInCart([])
         context.setContadorCarrito(0)
+        context.setSearchByTitle(null)
            
 }
 

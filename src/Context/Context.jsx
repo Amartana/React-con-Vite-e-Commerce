@@ -77,7 +77,6 @@ export function ShoppingProvider({children}){
   const [order, setOrder] = useState([])
 
 
-
   //Datos de la API---------------------------------------------------------
   const [items, setItems] = useState(null)
 
@@ -89,11 +88,24 @@ export function ShoppingProvider({children}){
   }
 
 
+  // //filtrar por categoria
+  //  function filtrarPorCategorias(categoria){
+  //    if(categoria !== undefined){
+  //    setItems(items.filter((item)=> item.category.name.toLowerCase() === categoria.toLowerCase()))
+  //   }
+  // }
+  
 
-  console.log('FILTRO: ', filteredItems)
 
-  //Buscador por titulo
+
+  //Estado del Buscador por titulo
   const [searchByTitle, setSearchByTitle] = useState(null)
+
+  // Estado de la busqueda por catedoria (este estado se actualiza con el useParams de Home)
+  const [searchByCategory, setSearchByCategory] = useState(null)
+
+
+  
 
 
   //Pedido de datos a la API
@@ -106,21 +118,57 @@ export function ShoppingProvider({children}){
         return response.json()
       })
       .then(info => {
-        setItems(info)
+        setItems(
+          
+          info
+
+          )
       })
       .catch(error => {
         alert('Error:', error)
       })
   }, [])
 
-  //Efect para la busqueda por titulo
+
+  //Filtros por busqueda y categoria ----------------------------------------------------------
+
   useEffect(()=> {
     if (searchByTitle) setFilteredItems(filteredItemsByTitle(items, searchByTitle))
+  }, [items, searchByTitle])
+
+  const filteredItemsByCategory = (items, searchByCategory) => {
+    return items?.filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
+  }
+
+  const filterBy = (searchType, items, searchByTitle, searchByCategory) => {
+    if (searchType === 'BY_TITLE') {
+      return filteredItemsByTitle(items, searchByTitle)
+    }
+
+    if (searchType === 'BY_CATEGORY') {
+      return filteredItemsByCategory(items, searchByCategory)
+    }
+
+    if (searchType === 'BY_TITLE_AND_CATEGORY') {
+      return filteredItemsByCategory(items, searchByCategory).filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
+    }
+
+    if (!searchType) {
+      return items
+    }
+  }
+
+  useEffect(() => {
+    if (searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_TITLE_AND_CATEGORY', items, searchByTitle, searchByCategory))
+    if (searchByTitle && !searchByCategory) setFilteredItems(filterBy('BY_TITLE', items, searchByTitle, searchByCategory))
+    if (!searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_CATEGORY', items, searchByTitle, searchByCategory))
+    if (!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null, items, searchByTitle, searchByCategory))
   },
+ // eslint-disable-next-line react-hooks/exhaustive-deps
+ [items, searchByTitle, searchByCategory])
 
-  [items, searchByTitle])
 
-    
+  
     return(
         <ShoppingCardContext.Provider value={{
             contadorCarrito,
@@ -143,7 +191,9 @@ export function ShoppingProvider({children}){
             setOrder,
             searchByTitle,
             setSearchByTitle,
-            filteredItems
+            filteredItems,
+            searchByCategory,
+            setSearchByCategory,
         }}>
           {children}
         </ShoppingCardContext.Provider>
