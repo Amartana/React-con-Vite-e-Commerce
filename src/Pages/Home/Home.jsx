@@ -13,6 +13,8 @@ function Home() {
   
  //Paths
  const { categoria } = useParams()
+ 
+ //Actualizador del estado del filtro por categoria
  useEffect(()=> {
     context.setSearchByCategory(categoria)
  }, 
@@ -30,7 +32,7 @@ function Home() {
         )
       } else {
         return (
-          <div className="absolute w-full flex flex-col items-center"> 
+          <div className="absolute w-full flex flex-col items-center left-0"> 
           <span>Lo siento, no tenemos ese producto...  Pero tenemos un osito con anteojos! </span>
           <img className="w-100 opacity-30" src='https://i.pinimg.com/564x/98/e8/de/98e8de4eb48de7bcd34a4febe3a2bffb.jpg'/>
           

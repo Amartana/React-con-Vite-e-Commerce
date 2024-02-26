@@ -24,7 +24,6 @@ export function ShoppingCart() {
         context.setProductsInCart([])
         context.setContadorCarrito(0)
         context.setSearchByTitle(null)
-           
 }
 
     return (
